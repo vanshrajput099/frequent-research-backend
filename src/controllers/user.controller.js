@@ -63,16 +63,11 @@ export const userController = asyncHandler(async (req, res) => {
     }
 
     if (profession === "entrepreneur" && !companyName) {
-        throw new ApiError("Company name is required for entrepreneurs", 400)
+        throw new ApiError("Company name is required for entrepreneurs", 400);
     }
 
     if (!req.file) {
-        throw new ApiError("Profile Image not found", 400)
-    }
-
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-        throw new ApiError("Username already exists", 400)
+        throw new ApiError("Profile Image not found", 400);
     }
 
     let filePath = req.file.path;
@@ -83,7 +78,7 @@ export const userController = asyncHandler(async (req, res) => {
         await fs.promises.unlink(filePath);
         imageUrl = imageRes.url;
     } catch (error) {
-        throw new ApiError("Error While uploading the image", 500)
+        throw new ApiError("Error While uploading the image", 500);
     }
 
     const userData = {
@@ -102,7 +97,17 @@ export const userController = asyncHandler(async (req, res) => {
         userData.password = password;
     }
 
-    const user = await User.create(userData)
+    // Find user by username
+    const existingUser = await User.findOne({ username });
 
-    res.status(201).json(new ApiResponse("User created successfully", 200, user));
+    let user;
+    if (existingUser) {
+        // Update existing user
+        user = await User.findByIdAndUpdate(existingUser._id, userData, { new: true });
+        res.status(200).json(new ApiResponse("User updated successfully", 200, user));
+    } else {
+        // Create new user
+        user = await User.create(userData);
+        res.status(201).json(new ApiResponse("User created successfully", 201, user));
+    }
 });
