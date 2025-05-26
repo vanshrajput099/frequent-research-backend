@@ -19,3 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //Routes
 
 app.use("/api/v1", userRouter)
+
+app.get("/",(req,res)=>{
+    console.log("Hie");
+})
