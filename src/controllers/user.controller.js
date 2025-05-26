@@ -96,17 +96,13 @@ export const userController = asyncHandler(async (req, res) => {
     if (password) {
         userData.password = password;
     }
-
-    // Find user by username
     const existingUser = await User.findOne({ username });
 
     let user;
     if (existingUser) {
-        // Update existing user
         user = await User.findByIdAndUpdate(existingUser._id, userData, { new: true });
         res.status(200).json(new ApiResponse("User updated successfully", 200, user));
     } else {
-        // Create new user
         user = await User.create(userData);
         res.status(201).json(new ApiResponse("User created successfully", 201, user));
     }
