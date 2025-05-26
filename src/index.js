@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 connectDB().then(() => {
-    app.listen(8000, () => {
-        console.log("Connected")
+    app.listen(process.env.PORT || 8000, () => {
+        console.log("Connected");
     })
 }).catch(err => console.log(err))
