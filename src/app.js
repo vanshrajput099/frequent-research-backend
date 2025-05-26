@@ -22,4 +22,5 @@ app.use("/api/v1", userRouter)
 
 app.get("/",(req,res)=>{
     console.log("Hie");
+    res.send("Hello from backend!");
 })
