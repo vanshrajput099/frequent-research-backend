@@ -5,6 +5,6 @@ dotenv.config();
 
 connectDB().then(() => {
     app.listen(process.env.PORT || 8000, () => {
-        console.log("Connected")
+        console.log("Connected");
     })
 }).catch(err => console.log(err))

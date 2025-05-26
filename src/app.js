@@ -20,6 +20,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/v1", userRouter)
 
-app.get("/", (req, res) => {
+app.get("/",(req,res)=>{
     res.send("Hello from backend!");
 })
