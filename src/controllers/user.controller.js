@@ -42,7 +42,7 @@ export const checkOldPassword = asyncHandler(async (req, res) => {
         throw new ApiError("Wrong password input", 401);
     }
 
-    return res.status(200).json(new ApiResponse("Username can be used", 200));
+    return res.status(200).json(new ApiResponse("Password verified", 200));
 });
 
 export const userController = asyncHandler(async (req, res) => {
@@ -68,6 +68,15 @@ export const userController = asyncHandler(async (req, res) => {
 
     if (!req.file) {
         throw new ApiError("Profile Image not found", 400);
+    }
+
+    if (password) {
+        const minLength = password.length >= 8;
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
+        if (!(minLength && hasNumber && hasSpecialChar)) {
+            throw new ApiError("Password should be more than 8 characters and have atleast 1 number and 1 special character", 400);
+        }
     }
 
     let filePath = req.file.path;
